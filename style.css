@@ -1,0 +1,23 @@
+h1{
+    text-align: center;
+    margin-top: 10%;
+}
+
+#canvas{
+    display: grid;
+    justify-content: center;
+    grid-template-columns: 100px 100px 100px;
+    grid-template-rows: 100px 100px 100px;
+}
+
+.cell{
+    border: 1px solid red;
+    background-color: black;
+    color: white;
+    width: 100px;
+    height: 100px;
+}
+
+button:hover{
+    opacity: 0.8;
+}
