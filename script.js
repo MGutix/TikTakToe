@@ -13,9 +13,7 @@ function Gameboard() {
         
     }
 
-    const getBoard = () => board;
-
-    // playerChoice  { if (occupied === invalid || empty => change to player symbol)}
+    let getBoard = () => board;
 
     const renderBoard = () => {
         for (let i = 0; i < rows; i++) {
@@ -23,33 +21,74 @@ function Gameboard() {
                 const cell = document.createElement("button");
                 cell.classList.add("cell");
                 cell.textContent = board[i][j];
-
                 canvas.appendChild(cell);
                 
+
+                cell.addEventListener('click',() => {
+                    if(cell.textContent === ''){
+                        board[i][j] = 'X' //playerSymbol
+                        //cell.textContent = 'X' //playerSymbol
+                    }
+                })
             }
-            
         }
-        
     }
 
-    return {getBoard, renderBoard, /*playerChoice*/}
+    return {getBoard, renderBoard}
 }
 
-function createPlayer (playerName, symbol) {
-    
-    return {playerName, symbol};
-}
+
 
 function GameFlow() {
-    // create players
-
-    // render board
     const board = Gameboard();
-    const printNewRound = () => {
-        board.printBoard();
-      };
-
-    // recieve playerInput => make changes to board (re render) + change turn
-
+    
     // check if winning/tie conditions met (if so) => post result + play again button
+
+    
+
+
+    const players = [
+        {
+          name: 'playerOne',
+          symbol: 'X',
+        },
+        {
+          name: 'playerTwo',
+          symbol: 'O',
+        }
+      ];
+
+
+    
+    let activePlayer = players[0];
+
+    const switchPlayerTurn = () => {
+        activePlayer = activePlayer === players[0]?  players[1] : players[0]
+    };
+    const getActivePlayer = () => activePlayer;
+
+    const printNewRound = () => {
+        board.renderBoard();
+        console.log(`${getActivePlayer().name}'s turn.`);
+    };
+
+    printNewRound()
+
+    const cellArray = document.getElementsByClassName('cell')
+
+    for (const cell of cellArray) {
+        cell.addEventListener('click', (event) => {
+            if (event.target.textContent === '') {
+                event.target.textContent = activePlayer.symbol;
+                switchPlayerTurn();
+                console.log(`${getActivePlayer().name}'s turn.`);
+            }
+        });
+    }
+
+
+    return {players, getActivePlayer, getBoard: board.getBoard}
 }
+
+
+const game = GameFlow();
