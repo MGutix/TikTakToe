@@ -15,18 +15,19 @@ function Gameboard() {
 
     let getBoard = () => board;
 
-    const renderBoard = () => {
+    const renderBoard = (symbol) => {
         for (let i = 0; i < rows; i++) {
             for (let j = 0; j < columns; j++) {
                 const cell = document.createElement("button");
                 cell.classList.add("cell");
                 cell.textContent = board[i][j];
+                cell.setAttribute("data-index", `${i}-${j}`);
                 canvas.appendChild(cell);
                 
 
                 cell.addEventListener('click',() => {
                     if(cell.textContent === ''){
-                        board[i][j] = 'X' //playerSymbol
+                        board[i][j] = symbol //playerSymbol
                         //cell.textContent = 'X' //playerSymbol
                     }
                 })
@@ -40,7 +41,7 @@ function Gameboard() {
 
 
 function GameFlow() {
-    const board = Gameboard();
+    
     
     // check if winning/tie conditions met (if so) => post result + play again button
 
@@ -67,12 +68,15 @@ function GameFlow() {
     };
     const getActivePlayer = () => activePlayer;
 
+    const board = Gameboard();
+
     const printNewRound = () => {
-        board.renderBoard();
+        board.renderBoard(getActivePlayer().symbol);
         console.log(`${getActivePlayer().name}'s turn.`);
     };
 
     printNewRound()
+    
 
     const cellArray = document.getElementsByClassName('cell')
 
@@ -80,10 +84,69 @@ function GameFlow() {
         cell.addEventListener('click', (event) => {
             if (event.target.textContent === '') {
                 event.target.textContent = activePlayer.symbol;
-                switchPlayerTurn();
-                console.log(`${getActivePlayer().name}'s turn.`);
+                const [rowIndex, columnIndex] = event.target.getAttribute("data-index").split('-');
+                board.getBoard()[rowIndex][columnIndex] = activePlayer.symbol;
+
+                if (winCon(board.getBoard(), activePlayer.symbol)){
+                    endGame();
+                } else {
+                    switchPlayerTurn();
+                    console.log(`${getActivePlayer().name}'s turn.`);
+                }
+
+                
+
+                
             }
+            
+            
         });
+    }
+
+    function winCon(board, symbol) {
+        //rows
+        if (board[0][0] === symbol && board[0][1]=== symbol && board[0][2]=== symbol){
+            console.log(`Winner is ${symbol}`)
+            return true
+        } else if (board[1][0] === symbol && board[1][1]=== symbol && board[1][2]=== symbol){
+            console.log(`Winner is ${symbol}`)
+            return true
+        } else if (board[2][0] === symbol && board[2][1]=== symbol && board[2][2]=== symbol){
+            console.log(`Winner is ${symbol}`)
+            return true
+        } 
+        //columns
+        else if (board[0][0] === symbol && board[1][0]=== symbol && board[2][0]=== symbol){
+            console.log(`Winner is ${symbol}`)
+            return true
+        } else if (board[0][1] === symbol && board[1][1]=== symbol && board[2][1]=== symbol){
+            console.log(`Winner is ${symbol}`)
+            return true
+        } else if (board[0][2] === symbol && board[1][2]=== symbol && board[2][2]=== symbol){
+            console.log(`Winner is ${symbol}`)
+            return true
+        }
+        //diagonals
+        else if (board[0][0] === symbol && board[1][1]=== symbol && board[2][2]=== symbol){
+            console.log(`Winner is ${symbol}`)
+            return true
+        }else if (board[0][2] === symbol && board[1][1]=== symbol && board[2][0]=== symbol){
+            console.log(`Winner is ${symbol}`)
+            return true
+        }
+        
+
+        console.log(board)
+
+        
+        return false
+    }
+
+    const endGame = () => {
+        // new game button etc
+        console.log('GAME OVER')
+        console.log('GAME OVER')
+        console.log('GAME OVER')
     }
 
 
