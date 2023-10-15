@@ -108,6 +108,8 @@ function GameFlow() {
 
         const playAgain = document.createElement('button')
         playAgain.setAttribute('id', 'playAgain')
+        playAgain.classList.add('btn')
+        playAgain.classList.add('btn-primary')
         playAgain.textContent = 'Play Again?'
 
         //rows
