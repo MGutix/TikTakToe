@@ -27,8 +27,7 @@ function Gameboard() {
 
                 cell.addEventListener('click',() => {
                     if(cell.textContent === ''){
-                        board[i][j] = symbol //playerSymbol
-                        //cell.textContent = 'X' //playerSymbol
+                        board[i][j] = symbol 
                     }
                 })
             }
@@ -38,15 +37,9 @@ function Gameboard() {
     return {getBoard, renderBoard}
 }
 
-
-
 function GameFlow() {
     
-    
-    // check if winning/tie conditions met (if so) => post result + play again button
-
-    
-
+    let gameOver = false;
 
     const players = [
         {
@@ -60,7 +53,6 @@ function GameFlow() {
       ];
 
 
-    
     let activePlayer = players[0];
 
     const switchPlayerTurn = () => {
@@ -80,58 +72,112 @@ function GameFlow() {
 
     const cellArray = document.getElementsByClassName('cell')
 
+    
     for (const cell of cellArray) {
         cell.addEventListener('click', (event) => {
-            if (event.target.textContent === '') {
-                event.target.textContent = activePlayer.symbol;
-                const [rowIndex, columnIndex] = event.target.getAttribute("data-index").split('-');
-                board.getBoard()[rowIndex][columnIndex] = activePlayer.symbol;
+            if (gameOver === false){
+                
+                if (event.target.textContent === '') {
+                    event.target.textContent = activePlayer.symbol;
+                    const [rowIndex, columnIndex] = event.target.getAttribute("data-index").split('-');
+                    board.getBoard()[rowIndex][columnIndex] = activePlayer.symbol;
 
-                if (winCon(board.getBoard(), activePlayer.symbol)){
-                    endGame();
-                } else {
-                    switchPlayerTurn();
-                    console.log(`${getActivePlayer().name}'s turn.`);
+                    if (winCon(board.getBoard(), activePlayer.symbol)){
+                        endGame();
+                        gameOver = true;
+                    } else {
+                        switchPlayerTurn();
+                        console.log(`${getActivePlayer().name}'s turn.`);
+                    }
+
+                    
+
+                    
                 }
-
-                
-
-                
             }
             
             
         });
     }
+    
 
     function winCon(board, symbol) {
+        const resultArea = document.getElementById('result')
+        const result = document.createElement('h1')
+        
+
+        const playAgain = document.createElement('button')
+        playAgain.setAttribute('id', 'playAgain')
+        playAgain.textContent = 'Play Again?'
+
         //rows
         if (board[0][0] === symbol && board[0][1]=== symbol && board[0][2]=== symbol){
             console.log(`Winner is ${symbol}`)
+            result.textContent = `Winner is ${symbol}`;
+            resultArea.appendChild(result)
+
+            resultArea.appendChild(playAgain)
+
             return true
         } else if (board[1][0] === symbol && board[1][1]=== symbol && board[1][2]=== symbol){
             console.log(`Winner is ${symbol}`)
+            result.textContent = `Winner is ${symbol}`;
+            resultArea.appendChild(result)
+
+            resultArea.appendChild(playAgain)
+
             return true
         } else if (board[2][0] === symbol && board[2][1]=== symbol && board[2][2]=== symbol){
             console.log(`Winner is ${symbol}`)
+            result.textContent = `Winner is ${symbol}`;
+            resultArea.appendChild(result)
+
+            resultArea.appendChild(playAgain)
+
             return true
         } 
         //columns
         else if (board[0][0] === symbol && board[1][0]=== symbol && board[2][0]=== symbol){
             console.log(`Winner is ${symbol}`)
+            result.textContent = `Winner is ${symbol}`;
+            resultArea.appendChild(result)
+
+            resultArea.appendChild(playAgain)
+
             return true
         } else if (board[0][1] === symbol && board[1][1]=== symbol && board[2][1]=== symbol){
             console.log(`Winner is ${symbol}`)
+            result.textContent = `Winner is ${symbol}`;
+            resultArea.appendChild(result)
+
+            resultArea.appendChild(playAgain)
+
             return true
         } else if (board[0][2] === symbol && board[1][2]=== symbol && board[2][2]=== symbol){
             console.log(`Winner is ${symbol}`)
+            result.textContent = `Winner is ${symbol}`;
+            resultArea.appendChild(result)
+
+            resultArea.appendChild(playAgain)
+
             return true
         }
         //diagonals
         else if (board[0][0] === symbol && board[1][1]=== symbol && board[2][2]=== symbol){
             console.log(`Winner is ${symbol}`)
+            result.textContent = `Winner is ${symbol}`;
+            resultArea.appendChild(result)
+
+            resultArea.appendChild(playAgain)
+
             return true
         }else if (board[0][2] === symbol && board[1][1]=== symbol && board[2][0]=== symbol){
             console.log(`Winner is ${symbol}`)
+            result.textContent = `Winner is ${symbol}`;
+            resultArea.appendChild(result)
+
+            resultArea.appendChild(playAgain)
+
             return true
         }
         let isFull = 0;
@@ -145,6 +191,11 @@ function GameFlow() {
         }
         if (isFull === 9){
             console.log(`Tie`)
+            result.textContent = 'Tie'
+            resultArea.appendChild(result)
+
+            resultArea.appendChild(playAgain)
+
             return true
         }
         return false
@@ -155,8 +206,16 @@ function GameFlow() {
         console.log('GAME OVER')
         console.log('GAME OVER')
         console.log('GAME OVER')
+
+        const playAgainButton = document.getElementById('playAgain')
+        playAgainButton.addEventListener('click', () =>{
+            console.log('new game')
+            document.location.reload()
+            
+        })
     }
 
+    
 
     return {players, getActivePlayer, getBoard: board.getBoard}
 }
